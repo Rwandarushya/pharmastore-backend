@@ -16,7 +16,7 @@ module.exports = {
       role: {
         type: Sequelize.STRING
       },
-      productId: {
+      pharmacyId: {
         type: Sequelize.INTEGER
       },
       createdAt: {
