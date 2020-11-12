@@ -10,7 +10,7 @@ module.exports = {
      productName: {
       type: Sequelize.STRING
      },
-     productType: {
+     description: {
       type: Sequelize.STRING
      },
      quantity: {
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Buses');
+    await queryInterface.dropTable('Products');
   }
 };
