@@ -11,9 +11,9 @@ export const createProduct = async (req, res) => {
           { status: 409, message: 'The Product already exist' }
         );
       }
-      const bus = await model.Product.create(req.body);
+      const product = await model.Product.create(req.body);
       return res.status(201).json(
-        { status: 201, message: 'Product created successfully', bus }
+        { status: 201, message: 'Product created successfully', product }
       );
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -21,6 +21,7 @@ export const createProduct = async (req, res) => {
   };
 
 export const getAllProducts = (req, res) => {
+  const email= req.params.email;
     model.Product.findAll()
       .then((product) => {
         // if (product.length < 1) {

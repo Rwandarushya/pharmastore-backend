@@ -13,6 +13,7 @@ const signupInput = (req) => {
 
 const UpdateInput = (req) => {
   const schema = Joi.object().keys({
+    names: Joi.string(),
     email: Joi.string().email(),
     password: Joi.string().min(6).max(15),
     role: Joi.string().valid('admin', 'standard'),
