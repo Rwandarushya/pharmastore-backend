@@ -8,8 +8,11 @@ const signup =(req, res) => {
 
   password = encryptPassword(password);
   const user = {
+    names:req.body.names,
     email: req.body.email,
     password,
+    pharmacyName:req.body.pharmacyName,
+    PhoneNumber:req.body.PhoneNumber,
     role: req.body.role,
     pharmacyId: req.body.pharmacyId
   };
@@ -64,13 +67,14 @@ const login = (req, res) => {
       );
 
       res.status(200).json(
-        { status: 200, message: 'login successfull', token }
+        { status: 200, message: 'login successfull',email, token}
       );
     })
     .catch(() => res.status(500).json(
       { status: 500, message: 'server error!' }
     ));
 };
+
 const getAllUsers = (req, res) => {
   models.User.findAll()
     .then((user) => {
@@ -78,9 +82,9 @@ const getAllUsers = (req, res) => {
         - (new Date(a.updatedAt).getTime()));
 
       const userInfo = lodash.map(allusers, lodash.partialRight(lodash.pick,
-        ['_id', 'email', 'role', 'pharmacyId', 'createdAt', 'updatedAt']));
+        ['_id', 'names', 'email', 'pharmacyName','PhoneNumber', 'role', 'pharmacyId', 'createdAt', 'updatedAt']));
 
-      res.status(200).json({ status: 200, data: userInfo });
+      res.status(200).json(userInfo );
     })
     .catch(() => res.status(500).json(
       { status: 500, message: 'server error!' }
@@ -96,7 +100,7 @@ const getSpecificUser = (req, res) => {
           { status: 404, message: 'There is no available user!' }
         );
       }
-      const userInfo = lodash.pick(user, 'id', 'pharmacyId', 'email', 'role');
+      const userInfo = lodash.pick(user, 'id', 'pharmacyId','names', 'email', 'pharmacyName','phoneNumber','role');
 
       res.status(200).json({ status: 200, userInfo });
     })
