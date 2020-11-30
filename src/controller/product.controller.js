@@ -4,7 +4,7 @@ import model from '../database/models'
 export const createProduct = async (req, res) => {
     try {
       const existProduct = await model.Product.findOne(
-        { where: { productName: req.body.productName} }
+        { where: { productName: req.body.productName } }
       );
       if (existProduct) {
         return res.status(409).json(
@@ -21,8 +21,12 @@ export const createProduct = async (req, res) => {
   };
 
 export const getAllProducts = (req, res) => {
-  const email= req.params.email;
-    model.Product.findAll()
+     const {email} =req.params
+    model.Product.findAll({
+      where: {
+        email:email
+      }
+    })
       .then((product) => {
         // if (product.length < 1) {
         //   return res.status(404).json(

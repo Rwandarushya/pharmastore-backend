@@ -3,47 +3,69 @@ import models from '../database/models';
 import { encryptPassword, decryptPassword } from '../helper/hashedPassword';
 import generateToken from '../helper/generateAuthToken';
 
-const signup =(req, res) => {
-  let { password } = req.body;
+const signup =async(req, res) => {
+  // let { password } = req.body.pasword;
 
-  password = encryptPassword(password);
+  const pass = encryptPassword(req.body.password);
   const user = {
     names:req.body.names,
     email: req.body.email,
-    password,
+    password:pass,
     pharmacyName:req.body.pharmacyName,
     PhoneNumber:req.body.PhoneNumber,
     role: req.body.role,
     pharmacyId: req.body.pharmacyId
   };
 
-      models.User.findOne({ where: { email: req.body.email } })
-        .then((emailFound) => {
-          if (emailFound) {
-            return res.status(409).json(
-              { status: 409, message: 'Email address already taken' }
-            );
-          }
+  try {
+    const existUser = await models.User.findOne(
+      { where: { email: req.body.email} }
+    );
 
-          models.User.create(user)
-            .then((data) => {
-              const token = generateToken(data.id, data.role, data.email);
-              const userData = {
-                token,
-                userInfo: lodash.pick(data, 'pharmacyId', 'email', 'role'),
-              };
-              res.status(201).json({
-                status: 201, message: 'User created successfully', userData
-              });
-            })
-            .catch(() => res.status(500).json(
-              { status: 500, message: 'server error!' }
-            ));
-        })
-        .catch(() => res.status(500).json(
-            { status: 500, message: 'server error!' }
-          ));
-};
+    if (existUser) {
+      return res.status(409).json(
+        { status: 409, message: 'User Already exist' }
+      );
+    }
+
+    const createdUser = await models.User.create(user);
+      return res.status(201).json(
+        { status: 201, message: 'User created successfully', createdUser }
+      );
+    
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+    
+
+      // models.User.findOne({ where: { email: req.body.email } })
+      //   .then((emailFound) => {
+      //     if (emailFound) {
+      //       return res.status(409).json(
+      //         { status: 409, message: 'Email address already taken' }
+      //       );
+      //     }
+
+      //     models.User.create(user)
+      //       .then((data) => {
+      //         const token = generateToken(data.id, data.role, data.email);
+      //         const userData = {
+      //           token,
+      //           userInfo: lodash.pick(data, 'pharmacyId', 'email', 'role'),
+      //         };
+      //         res.status(201).json({
+      //           status: 201, message: 'User created successfully', userData
+      //         });
+      //       })
+      //       .catch(() => res.status(500).json(
+      //         { status: 500, message: 'server error!' }
+      //       ));
+      //   })
+      //   .catch(() => res.status(500).json(
+      //       { status: 500, message: 'server error!' }
+      //     ));
+    };
+
 
 const login = (req, res) => {
   const { email, password } = req.body;
@@ -82,7 +104,7 @@ const getAllUsers = (req, res) => {
         - (new Date(a.updatedAt).getTime()));
 
       const userInfo = lodash.map(allusers, lodash.partialRight(lodash.pick,
-        ['_id', 'names', 'email', 'pharmacyName','PhoneNumber', 'role', 'pharmacyId', 'createdAt', 'updatedAt']));
+        ['id', 'names', 'email', 'pharmacyName','PhoneNumber', 'role', 'pharmacyId', 'createdAt', 'updatedAt']));
 
       res.status(200).json(userInfo );
     })
