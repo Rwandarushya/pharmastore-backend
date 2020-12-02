@@ -1,6 +1,5 @@
 import express from 'express'
 import {createProduct,getAllProducts,getProductById,deleteProductById,updateProductById} from '../controller/product.controller'
-
 const router = express.Router();
 
 router.post('/', createProduct);

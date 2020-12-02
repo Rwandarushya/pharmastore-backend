@@ -87,9 +87,10 @@ const login = (req, res) => {
       const token = generateToken(
         emailFound.id, emailFound.role, emailFound.email
       );
+      const role= emailFound.role;
 
       res.status(200).json(
-        { status: 200, message: 'login successfull',email, token}
+        { status: 200, message: 'login successfull',email, role, token}
       );
     })
     .catch(() => res.status(500).json(
