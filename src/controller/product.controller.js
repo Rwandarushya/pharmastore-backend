@@ -6,11 +6,11 @@ export const createProduct = async (req, res) => {
       const existProduct = await model.Product.findOne(
         { where: { productName: req.body.productName } }
       );
-      if (existProduct) {
-        return res.status(409).json(
-          { status: 409, message: 'The Product already exist' }
-        );
-      }
+      // if (existProduct) {
+      //   return res.status(409).json(
+      //     { status: 409, message: 'The Product already exist' }
+      //   );
+      // }
       const product = await model.Product.create(req.body);
       return res.status(201).json(
         { status: 201, message: 'Product created successfully', product }
