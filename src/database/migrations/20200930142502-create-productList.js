@@ -13,9 +13,6 @@ module.exports = {
      description: {
       type: Sequelize.STRING
      },
-     expiration: {
-      type: Sequelize.STRING
-     },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
