@@ -7,11 +7,10 @@ dotenv.config();
 const verifyAdminToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (typeof authHeader === 'undefined') {
-    res.status(401).json({
+    return res.status(401).json({
       status: 401,
       message: 'You are not authorized to use this resource'
     });
-    return;
   }
   const token = authHeader;
 
@@ -30,7 +29,7 @@ const verifyAdminToken = (req, res, next) => {
     const { email } = req.authUser;
 
     if (role != 'admin') {
-      res.status(401).send({
+      return res.status(401).send({
         status: 401,
         message: 'You do not have a permission to perform this action'
       });
@@ -57,11 +56,10 @@ const verifyAdminToken = (req, res, next) => {
 const verifyUserToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (typeof authHeader === 'undefined') {
-    res.status(401).json({
+    return res.status(401).json({
       status: 401,
       message: 'You are not authorized to use this resource'
     });
-    return;
   }
   const token = authHeader;
 
