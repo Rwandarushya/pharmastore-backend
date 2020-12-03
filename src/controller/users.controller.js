@@ -4,9 +4,9 @@ import { encryptPassword, decryptPassword } from '../helper/hashedPassword';
 import generateToken from '../helper/generateAuthToken';
 
 const signup =async(req, res) => {
-  // let { password } = req.body.pasword;
+  let { password } = req.body;
 
-  const pass = encryptPassword(req.body.password);
+  let pass =  encryptPassword(password);
   const user = {
     names:req.body.names,
     email: req.body.email,
