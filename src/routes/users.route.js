@@ -14,7 +14,7 @@ router.post('/signup', [verifyAdminToken, userSignupInput], signup);
 
 router.post('/login', [userLoginInput], login);
 
-router.get('/', [verifyAdminToken], getAllUsers);
+router.get('/',  getAllUsers);
 
 router.get('/:id', [verifyAdminToken], getSpecificUser);
 
